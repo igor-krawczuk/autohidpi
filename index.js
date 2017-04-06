@@ -8,7 +8,7 @@ var self = require('sdk/self');
 var storage = require('sdk/simple-storage').storage;
 var events = require('sdk/system/events');
 
-const DEFAULT_PIXEL_RATIO = 1;
+DEFAULT_PIXEL_RATIO = 1;
 const UPDATE_INTERVAL_MS = 500;
 const SLACK = 128;
 
@@ -161,6 +161,15 @@ events.on('user-interaction-inactive', function () {
 }, true);
 
 panel.port.on('pixelRatioChanged', function (pixelRatio) {
+  resetDevPixelsPerPx();
+
+  savePixelRatio(getActiveScreen(), pixelRatio);
+  console.log('saved pixelRatio', pixelRatio);
+
+  update(true);
+});
+panel.port.on('defaultRatioChanged', function (pixelRatio) {
+  DEFAULT_PIXEL_RATIO=pixelRatio;
   resetDevPixelsPerPx();
 
   savePixelRatio(getActiveScreen(), pixelRatio);
